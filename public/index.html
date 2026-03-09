@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vapurl: Shorten in a Mist.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full glass p-8 rounded-2xl shadow-xl border border-white">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Vapurl</h1>
+            <p class="text-slate-500 mt-2 font-medium">Shorten in a Mist.</p>
+        </div>
+
+        <div class="space-y-4">
+            <!-- API Key Input -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">API Key</label>
+                <input type="password" id="apiKey" placeholder="Enter your API_KEY"
+                    class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <p class="text-[10px] text-slate-400 mt-1">※ Saved locally in your browser.</p>
+            </div>
+
+            <!-- Original URL Input -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Original URL</label>
+                <input type="url" id="targetUrl" placeholder="https://example.com/very-long-path"
+                    class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+
+            <!-- Custom ID Input -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Custom ID</label>
+                <input type="text" id="customId" placeholder="my-link"
+                    class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+
+            <button id="createBtn" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors shadow-lg disabled:opacity-50">
+                Create Vapurl
+            </button>
+        </div>
+
+        <!-- Result Display -->
+        <div id="resultArea" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p class="text-sm text-green-800 font-medium mb-1">Success! Your link:</p>
+            <div class="flex items-center gap-2">
+                <input type="text" id="resultUrl" readonly class="flex-1 bg-white border border-green-300 rounded px-2 py-1 text-sm text-slate-700">
+                <button onclick="copyToClipboard()" class="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">Copy</button>
+            </div>
+        </div>
+
+        <div id="errorArea" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+        </div>
+    </div>
+
+    <script>
+        const createBtn = document.getElementById('createBtn');
+        const resultArea = document.getElementById('resultArea');
+        const errorArea = document.getElementById('errorArea');
+        const apiKeyInput = document.getElementById('apiKey');
+
+        // Load saved API Key on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem('vapurl_api_key');
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+            }
+        });
+
+        createBtn.addEventListener('click', async () => {
+            const apiKey = apiKeyInput.value;
+            const url = document.getElementById('targetUrl').value;
+            const id = document.getElementById('customId').value;
+
+            if (!apiKey || !url || !id) {
+                showError('All fields are required');
+                return;
+            }
+
+            createBtn.disabled = true;
+            resultArea.classList.add('hidden');
+            errorArea.classList.add('hidden');
+
+            try {
+                const apiEndpoint = window.location.origin + '/api/create';
+
+                const response = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, url })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save API Key if request succeeded
+                    localStorage.setItem('vapurl_api_key', apiKey);
+
+                    document.getElementById('resultUrl').value = data.short_url;
+                    resultArea.classList.remove('hidden');
+                } else {
+                    showError(data.error || 'Failed to create link');
+                }
+            } catch (err) {
+                showError('Network error or Workers not reachable');
+            } finally {
+                createBtn.disabled = false;
+            }
+        });
+
+        function showError(msg) {
+            errorArea.textContent = msg;
+            errorArea.classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById("resultUrl");
+            copyText.select();
+            document.execCommand("copy");
+            // Simple visual feedback instead of alert
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = "Done!";
+            setTimeout(() => btn.textContent = originalText, 2000);
+        }
+    </script>
+</body>
+</html>

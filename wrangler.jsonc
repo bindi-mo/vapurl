@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vapurl",
+  "compatibility_date": "2025-08-03",
+  "main": "./src/index.ts",
+  "kv_namespaces": [
+    {
+      "binding": "URL_KV",
+      "id": "b57983a7e87e4b7da6a822f8dbb47b66"
+    }
+  ],
+  "vars": {
+    "API_KEY": "3DipnlW4FcTY0q3iCJzPc7lxKGZuuJeCs2aMAzdIgbi"
+  }
+}
