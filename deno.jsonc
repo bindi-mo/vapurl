@@ -11,7 +11,8 @@
     "lib": ["deno.window", "dom"],
     "strict": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "types": ["@types/jsdom"]
   },
   "imports": {
     "react": "npm:react@18.3.1",
@@ -19,6 +20,7 @@
     "@testing-library/react": "npm:@testing-library/react@16.0.0",
     "@testing-library/jest-dom": "npm:@testing-library/jest-dom@6.4.2",
     "jsdom": "npm:jsdom@25.0.0",
+    "@types/jsdom": "npm:@types/jsdom",
     "hono": "npm:hono@^4.12.5",
     "hono/testing": "npm:hono@^4.12.5/testing"
   },
