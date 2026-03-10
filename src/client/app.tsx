@@ -72,17 +72,19 @@ export default function App() {
 
         <div className="space-y-4">
           {/* API Key Input */}
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">API Key</label>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Enter your API_KEY"
-              className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-            />
-            <p className="text-[10px] text-slate-400 mt-1">※ Saved locally in your browser.</p>
-          </div>
+          {!apiKey && (
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">API Key</label>
+              <input
+                type="password"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Enter your API_KEY"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">※ Saved locally in your browser.</p>
+            </div>
+          )}
 
           {/* Original URL Input */}
           <div>
