@@ -22,7 +22,6 @@ app.get('/', (c) => {
   const html = renderToString(
     <html>
       <head>
-        <script src="https://cdn.tailwindcss.com"></script>
         <ViteClient />
         <ReactRefresh />
         <Script src='/src/client/index.tsx' />
