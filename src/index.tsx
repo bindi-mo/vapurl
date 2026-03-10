@@ -1,9 +1,5 @@
 /**
  * Vapurl: A personal URL shortener on Cloudflare Workers
- * * [修正内容]
- * ローカル環境や Wrangler でのビルドを想定した Hono の標準的な構成です。
- * プレビュー環境でのエラーを回避するため、実際のデプロイ時には
- * `npm install hono` が必要であることを前提としています。
  */
 
 import { KVNamespace } from '@cloudflare/workers-types'
@@ -21,7 +17,7 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// ルートページ
+// Root page
 app.get('/', (c) => {
   const html = renderToString(
     <html>
@@ -40,22 +36,22 @@ app.get('/', (c) => {
   return c.html(html)
 })
 
-// リダイレクトロジック
+// Redirect logic
 app.get('/:id', async (c) => {
   const id = c.req.param('id')
 
-  // KVからURLを取得
+  // Get URL from KV
   const url = await c.env.URL_KV.get(id)
 
   if (!url) {
-    return c.text('Vapurl: 指定されたリンクは見つかりませんでした。', 404)
+    return c.text('Vapurl: The specified link was not found.', 404)
   }
 
-  // 302 リダイレクトを実行（統計取得などを考慮し、一時的リダイレクトを推奨）
+  // Perform 302 redirect (temporary redirect recommended considering statistics, etc.)
   return c.redirect(url, 302)
 })
 
-// 作成用 API (Bearer Auth で保護)
+// API for creation (protected by Bearer Auth)
 app.post(
   '/api/create',
   async (c, next) => {
@@ -67,19 +63,19 @@ app.post(
       const { id, url } = await c.req.json()
 
       if (!id || !url) {
-        return c.json({ error: 'IDとURLは必須です' }, 400)
+        return c.json({ error: 'ID and URL are required' }, 400)
       }
 
-      // KVに保存
+      // Save to KV
       await c.env.URL_KV.put(id, url)
 
       return c.json({
-        message: 'Vapurlが正常に作成されました',
+        message: 'Vapurl was created successfully',
         short_url: `${new URL(c.req.url).origin}/${id}`,
         original_url: url
       })
     } catch (_e) {
-      return c.json({ error: '無効なJSONリクエストです' }, 400)
+      return c.json({ error: 'Invalid JSON request' }, 400)
     }
   }
 )
