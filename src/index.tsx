@@ -9,7 +9,10 @@
 import { KVNamespace } from '@cloudflare/workers-types'
 import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
-import html from './index.html?raw'
+import pkg from 'react-dom/server'
+import { Link, ReactRefresh, Script, ViteClient } from 'vite-ssr-components/react'
+import App from './client/app'
+const { renderToString } = pkg
 
 type Bindings = {
   URL_KV: KVNamespace
@@ -19,7 +22,23 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 // ルートページ
-app.get('/', (c) => c.html(html))
+app.get('/', (c) => {
+  const html = renderToString(
+    <html>
+      <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <ViteClient />
+        <ReactRefresh />
+        <Script src='/src/client/index.tsx' />
+        <Link href='/src/style.css' rel='stylesheet' />
+      </head>
+      <body>
+        <div id='root'><App /></div>
+      </body>
+    </html>
+  )
+  return c.html(html)
+})
 
 // リダイレクトロジック
 app.get('/:id', async (c) => {

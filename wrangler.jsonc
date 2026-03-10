@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vapurl",
   "compatibility_date": "2025-08-03",
-  "main": "./src/index.ts",
+  "main": "./src/index.tsx",
   "kv_namespaces": [
     {
       "binding": "URL_KV",
