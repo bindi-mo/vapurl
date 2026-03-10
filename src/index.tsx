@@ -11,7 +11,7 @@ import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
 import pkg from 'react-dom/server'
 import { Link, ReactRefresh, Script, ViteClient } from 'vite-ssr-components/react'
-import App from './client/app'
+import App from './client/app.tsx'
 const { renderToString } = pkg
 
 type Bindings = {
@@ -59,7 +59,6 @@ app.get('/:id', async (c) => {
 app.post(
   '/api/create',
   async (c, next) => {
-    // Cloudflareコンソールで設定した API_KEY と照合
     const token = c.env.API_KEY
     return bearerAuth({ token })(c, next)
   },
@@ -79,7 +78,7 @@ app.post(
         short_url: `${new URL(c.req.url).origin}/${id}`,
         original_url: url
       })
-    } catch (e) {
+    } catch (_e) {
       return c.json({ error: '無効なJSONリクエストです' }, 400)
     }
   }

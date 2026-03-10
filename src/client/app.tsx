@@ -44,7 +44,7 @@ export default function App() {
       } else {
         setError(data.error || 'Failed to create link');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error or Workers not reachable');
     } finally {
       setLoading(false);
@@ -109,6 +109,7 @@ export default function App() {
           </div>
 
           <button
+            type="button"
             onClick={handleSubmit}
             disabled={loading}
             className="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors shadow-lg disabled:opacity-50"
@@ -129,6 +130,7 @@ export default function App() {
                 className="flex-1 bg-white border border-green-300 rounded px-2 py-1 text-sm text-slate-700"
               />
               <button
+                type="button"
                 id="copyBtn"
                 onClick={copyToClipboard}
                 className="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"

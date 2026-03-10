@@ -1,0 +1,29 @@
+{
+  "nodeModulesDir": "auto",
+  "lint": {
+    "exclude": ["worker-configuration.d.ts"],
+    "rules": {
+      "require-await": "off"
+    }
+  },
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "lib": ["deno.window", "dom"],
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "imports": {
+    "react": "npm:react@18.3.1",
+    "react-dom": "npm:react-dom@18.3.1",
+    "@testing-library/react": "npm:@testing-library/react@16.0.0",
+    "@testing-library/jest-dom": "npm:@testing-library/jest-dom@6.4.2",
+    "jsdom": "npm:jsdom@25.0.0",
+    "hono": "npm:hono@^4.12.5",
+    "hono/testing": "npm:hono@^4.12.5/testing"
+  },
+  "tasks": {
+    "test": "deno test --allow-all",
+    "lint": "deno lint"
+  }
+}
