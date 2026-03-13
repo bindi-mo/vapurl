@@ -17,6 +17,14 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Configure wrangler.toml
+        run: |
+          echo "VAPURL_KV_ID: ${{ secrets.VAPURL_KV_ID }}"
+          echo "VAPURL_API_KEY: ${{ secrets.VAPURL_API_KEY }}"
+          sed -i 's/${VAPURL_KV_ID}/${{ secrets.VAPURL_KV_ID }}/g' wrangler.toml
+          sed -i 's/${VAPURL_API_KEY}/${{ secrets.VAPURL_API_KEY }}/g' wrangler.toml
+          cat wrangler.toml
+
       - name: Install dependencies
         run: npm ci
 
@@ -25,7 +33,3 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          preCommands: |
-            export VAPURL_API_KEY=${{ secrets.VAPURL_API_KEY }}
-            export VAPURL_KV_ID=${{ secrets.VAPURL_KV_ID }}
-          command: deploy
