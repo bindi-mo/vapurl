@@ -25,5 +25,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          kvNamespaces: VAPURL_KV=${{ secrets.VAPURL_KV_ID }}
           vars: VAPURL_API_KEY=${{ secrets.VAPURL_API_KEY }}
+          preCommands: export VAPURL_KV_ID=${{ secrets.VAPURL_KV_ID }}
