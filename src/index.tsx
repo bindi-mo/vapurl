@@ -22,19 +22,25 @@ app.get('/', (c) => {
   const html = renderToString(
     <html>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style dangerouslySetInnerHTML={{ __html: `
+          body { background-color: #f8fafc; margin: 0; }
+          .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+          #root { opacity: 0; }
+          #root.hydrated { opacity: 1; transition: opacity 0.1s; }
+        `}} />
         <ViteClient />
         <ReactRefresh />
         <Link href='/src/style.css' rel='stylesheet' />
         <Script src='/src/client/index.tsx' />
         <title>Vapurl: Shorten in a Mist</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
         <div id='root'><App /></div>
       </body>
     </html>
   )
-  return c.html(html)
+  return c.html('<!DOCTYPE html>' + html)
 })
 
 // Redirect logic
