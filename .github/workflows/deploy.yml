@@ -18,12 +18,10 @@ jobs:
           node-version: '18'
 
       - name: Configure wrangler.toml
-        run: |
-          echo "VAPURL_KV_ID: ${{ secrets.VAPURL_KV_ID }}"
-          echo "VAPURL_API_KEY: ${{ secrets.VAPURL_API_KEY }}"
-          sed -i 's/${VAPURL_KV_ID}/${{ secrets.VAPURL_KV_ID }}/g' wrangler.toml
-          sed -i 's/${VAPURL_API_KEY}/${{ secrets.VAPURL_API_KEY }}/g' wrangler.toml
-          cat wrangler.toml
+        run: envsubst '$VAPURL_KV_ID $VAPURL_API_KEY' < wrangler.template.toml > wrangler.toml
+        env:
+          VAPURL_KV_ID: ${{ secrets.VAPURL_KV_ID }}
+          VAPURL_API_KEY: ${{ secrets.VAPURL_API_KEY }}
 
       - name: Install dependencies
         run: npm ci

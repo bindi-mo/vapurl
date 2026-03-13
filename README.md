@@ -38,7 +38,16 @@ A personal URL shortener built on Cloudflare Workers using React, Hono, and Tail
    - `VAPURL_KV_ID`: Your KV namespace ID
    - `VAPURL_API_KEY`: A secret API key for authentication
 
-   You can set these in your local environment or in `wrangler.toml` for deployment.
+### Configuration
+
+`wrangler.toml` is auto-generated from the template (`wrangler.template.toml`). Set the required environment variables before running any commands.
+
+```bash
+export VAPURL_KV_ID="your-kv-namespace-id"
+export VAPURL_API_KEY="your-api-key"
+```
+
+> `wrangler.toml` is listed in `.gitignore` and will not be committed to the repository.
 
 ## Development
 
@@ -58,10 +67,30 @@ npm run build
 
 ## Deploy
 
-Deploy to Cloudflare Workers:
+### Local
+
+Set the environment variables and run:
+
 ```bash
+export VAPURL_KV_ID="your-kv-namespace-id"
+export VAPURL_API_KEY="your-api-key"
 npm run deploy
 ```
+
+This uses `envsubst` to generate `wrangler.toml` from `wrangler.template.toml`, then builds and deploys.
+
+### GitHub Actions
+
+Pushes to the `main` branch trigger an automatic deployment.
+
+Add the following secrets in your GitHub repository under **Settings → Secrets and variables → Actions**:
+
+| Secret | Description |
+|---|---|
+| `VAPURL_KV_ID` | Cloudflare KV Namespace ID |
+| `VAPURL_API_KEY` | API authentication key |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
 
 ## API Usage
 
