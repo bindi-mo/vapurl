@@ -21,10 +21,11 @@ jobs:
         run: npm ci
 
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           preCommands: |
             export VAPURL_API_KEY=${{ secrets.VAPURL_API_KEY }}
             export VAPURL_KV_ID=${{ secrets.VAPURL_KV_ID }}
+          command: deploy
