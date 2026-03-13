@@ -6,8 +6,9 @@ import { KVNamespace } from '@cloudflare/workers-types'
 import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
 import pkg from 'react-dom/server'
-import { Link, ReactRefresh, Script, ViteClient } from 'vite-ssr-components/react'
+import { ReactRefresh, Script, ViteClient } from 'vite-ssr-components/react'
 import App from './client/app.tsx'
+import './style.css'
 const { renderToString } = pkg
 
 type Bindings = {
@@ -25,7 +26,6 @@ app.get('/', (c) => {
         <ViteClient />
         <ReactRefresh />
         <Script src='/src/client/index.tsx' />
-        <Link href='/src/style.css' rel='stylesheet' />
         <title>Vapurl: Shorten in a Mist</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
