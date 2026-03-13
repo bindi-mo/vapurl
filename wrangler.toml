@@ -1,0 +1,10 @@
+name = "vapurl"
+compatibility_date = "2025-08-03"
+main = "./src/index.tsx"
+
+kv_namespaces = [
+  { binding = "VAPURL_KV", id = "${VAPURL_KV_ID}" }
+]
+
+[vars]
+API_KEY = "${VAPURL_API_KEY}"
