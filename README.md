@@ -1,4 +1,3 @@
-```txt
 # Vapurl
 
 A personal URL shortener built on Cloudflare Workers using React, Hono, and Tailwind CSS.
