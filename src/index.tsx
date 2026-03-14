@@ -20,14 +20,17 @@ let cacheHtml: string | null = null
 
 // Root page
 app.get('/', (c) => {
+  const cacheControl = c.req.header('Cache-Control')
+  if (cacheControl === 'max-age=0' || cacheControl === 'no-cache') {
+    cacheHtml = null
+  }
+
   if (!cacheHtml) {
     cacheHtml = '<!DOCTYPE html>' + renderToString(
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style dangerouslySetInnerHTML={{ __html: `
-          body { background-color: #f8fafc; margin: 0; }
-          .glass { background: rgba(245, 245, 245, 0.9); backdrop-filter: blur(10px); }
           #root { opacity: 0; }
           #root.hydrated { opacity: 1; transition: opacity 0.1s; }
         `}} />
