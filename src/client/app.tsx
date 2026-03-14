@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function App() {
   const [apiKey, setApiKey] = useState('');
@@ -9,6 +9,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const customIdRef = useRef<HTMLInputElement>(null);
 
   // Generate a random 3-character ID using alphanumeric chars, excluding
   // ambiguous ones (0, 1, l, o).
@@ -187,15 +188,19 @@ export default function App() {
               {/* Custom ID Input */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Custom ID</label>
-                <div className="flex items-center rounded-lg border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
+                <div
+                  onClick={() => customIdRef.current?.focus()}
+                  className="flex items-center rounded-lg border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500 cursor-pointer focus-within:cursor-text focus-within:bg-white transition-all"
+                >
                   <span className="pl-4 pr-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">{window.location.host}</span>
                   <span className="px-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">/</span>
                   <input
+                    ref={customIdRef}
                     type="text"
                     value={customId}
                     onChange={(e) => setCustomId(e.target.value)}
                     placeholder="my-link"
-                    className="flex-1 px-[0.125rem] py-2 rounded-r-lg outline-none bg-transparent"
+                    className="flex-1 px-[0.125rem] py-2 rounded-r-lg outline-none bg-transparent cursor-[inherit]"
                   />
                 </div>
               </div>
