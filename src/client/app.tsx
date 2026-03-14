@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+declare const __APP_VERSION__: string;
+
 export default function App() {
   const [apiKey, setApiKey] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
@@ -141,7 +143,10 @@ export default function App() {
     <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#f8fafc' }}>
       <div className="max-w-md w-full glass p-8 rounded-2xl shadow-xl border border-white">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">Vapurl</h1>
+          <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight inline-flex items-baseline">
+            Vapurl
+            <span className="text-sm font-normal text-slate-400 ml-1 align-super">v{__APP_VERSION__}</span>
+          </h1>
           <p className="text-slate-500 mt-2 font-medium">Shorten in a Mist.</p>
         </div>
 

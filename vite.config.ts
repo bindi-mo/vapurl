@@ -6,8 +6,12 @@ import autoprefixer from 'autoprefixer'
 import tailwindcss from 'tailwindcss'
 import { defineConfig } from 'vite'
 import ssrPlugin from 'vite-ssr-components/plugin'
+import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig(({ mode }) => ({
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   plugins: [
     cloudflare(),
     ssrPlugin({

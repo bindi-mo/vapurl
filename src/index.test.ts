@@ -1,6 +1,9 @@
 import { expect } from "jsr:@std/expect";
 import app from "./index.tsx";
 
+// Setup globals for SSR
+(globalThis as Record<string, unknown>).__APP_VERSION__ = "0.0.0-test";
+
 // Mock KV
 const mockKV = {
   get: (_key: string) => {
