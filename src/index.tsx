@@ -69,7 +69,6 @@ app.post(
   '/api/verify',
   async (c, next) => {
     const token = c.env.API_KEY
-    const authHeader = c.req.header('Authorization')
     return bearerAuth({ token })(c, next)
   },
   async (c) => {

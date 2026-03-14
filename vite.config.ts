@@ -8,7 +8,7 @@ import { defineConfig } from 'vite'
 import ssrPlugin from 'vite-ssr-components/plugin'
 import pkg from './package.json' with { type: 'json' }
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode: _mode }) => ({
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },

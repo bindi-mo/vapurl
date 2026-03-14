@@ -1,4 +1,4 @@
-import { expect } from "jsr:@std/expect";
+import { expect } from "@std/expect";
 import app from "./index.tsx";
 
 // Setup globals for SSR

@@ -3,7 +3,7 @@
   "lint": {
     "exclude": ["worker-configuration.d.ts"],
     "rules": {
-      "require-await": "off"
+      "exclude": ["require-await"]
     }
   },
   "compilerOptions": {
@@ -22,7 +22,8 @@
     "jsdom": "npm:jsdom@25.0.0",
     "@types/jsdom": "npm:@types/jsdom",
     "hono": "npm:hono@^4.12.5",
-    "hono/testing": "npm:hono@^4.12.5/testing"
+    "hono/testing": "npm:hono@^4.12.5/testing",
+    "@std/expect": "jsr:@std/expect@^1"
   },
   "tasks": {
     "test": "deno test --allow-all",

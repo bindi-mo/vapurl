@@ -2047,6 +2047,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@std/expect@1",
       "npm:@testing-library/jest-dom@6.4.2",
       "npm:@testing-library/react@16.0.0",
       "npm:@types/jsdom@*",

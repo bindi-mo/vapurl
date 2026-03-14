@@ -1,4 +1,4 @@
-import { expect } from "jsr:@std/expect";
+import { expect } from "@std/expect";
 import { render } from "@testing-library/react";
 import { JSDOM } from "jsdom";
 import App from "./app.tsx";

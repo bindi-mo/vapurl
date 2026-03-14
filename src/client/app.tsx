@@ -20,7 +20,7 @@ export default function App() {
     const numbers = '23456789'; // Excluded '0' and '1'
     const allChars = letters + numbers;
 
-    let result = [];
+    const result = [];
 
     // Guarantee at least one number
     result.push(numbers.charAt(Math.floor(Math.random() * numbers.length)));
@@ -197,7 +197,7 @@ export default function App() {
                   onClick={() => customIdRef.current?.focus()}
                   className="flex items-center rounded-lg border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500 cursor-pointer focus-within:cursor-text focus-within:bg-white transition-all"
                 >
-                  <span className="pl-4 pr-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">{window.location.host}</span>
+                  <span className="pl-4 pr-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">{globalThis.location.host}</span>
                   <span className="px-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">/</span>
                   <input
                     ref={customIdRef}
