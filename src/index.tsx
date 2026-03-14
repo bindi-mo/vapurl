@@ -62,6 +62,19 @@ app.get('/:id', async (c) => {
   return c.redirect(url, 302)
 })
 
+// API key verification endpoint
+app.post(
+  '/api/verify',
+  async (c, next) => {
+    const token = c.env.API_KEY
+    const authHeader = c.req.header('Authorization')
+    return bearerAuth({ token })(c, next)
+  },
+  async (c) => {
+    return c.json({ message: 'API key is valid' })
+  }
+)
+
 // API for creation (protected by Bearer Auth)
 app.post(
   '/api/create',
