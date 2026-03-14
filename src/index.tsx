@@ -16,10 +16,12 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+let cacheHtml: string | null = null
 
 // Root page
 app.get('/', (c) => {
-  const html = renderToString(
+  if (!cacheHtml) {
+    cacheHtml = '<!DOCTYPE html>' + renderToString(
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,7 +42,9 @@ app.get('/', (c) => {
       </body>
     </html>
   )
-  return c.html('<!DOCTYPE html>' + html)
+  }
+
+  return c.html(cacheHtml)
 })
 
 // Redirect logic
