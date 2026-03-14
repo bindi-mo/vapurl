@@ -11,7 +11,7 @@ const mockKV = {
 };
 
 const env = {
-  URL_KV: mockKV,
+  VAPURL_KV: mockKV,
   API_KEY: "test-key",
 };
 
