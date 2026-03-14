@@ -10,6 +10,42 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
 
+  // Generate a random 3-character ID using alphanumeric chars, excluding
+  // ambiguous ones (0, 1, l, o).
+  const generateRandomId = () => {
+    const letters = 'abcdefghijkmnpqrstuvwxyz'; // Excluded 'l' and 'o'
+    const numbers = '23456789'; // Excluded '0' and '1'
+    const allChars = letters + numbers;
+
+    let result = [];
+
+    // Guarantee at least one number
+    result.push(numbers.charAt(Math.floor(Math.random() * numbers.length)));
+
+    // Fill the remaining 2 characters randomly from all allowed characters
+    for (let i = 0; i < 2; i++) {
+      result.push(allChars.charAt(Math.floor(Math.random() * allChars.length)));
+    }
+
+    // Shuffle the array to randomize the position of the number
+    return result.sort(() => Math.random() - 0.5).join('');
+  };
+
+  const generateAvailableId = async (key: string) => {
+    for (let i = 0; i < 20; i++) {
+      const id = generateRandomId();
+      const res = await fetch(`/api/check/${id}`, {
+        headers: { 'Authorization': `Bearer ${key}` },
+      });
+      const data = await res.json() as { exists: boolean };
+      if (!data.exists) {
+        setCustomId(id);
+        return;
+      }
+    }
+    setCustomId(generateRandomId());
+  };
+
   // Verify API key against the server
   const verifyApiKey = async (key: string) => {
     setVerifying(true);
@@ -24,6 +60,7 @@ export default function App() {
       if (response.ok) {
         localStorage.setItem('vapurl_api_key', key);
         setAuthenticated(true);
+        generateAvailableId(key);
       } else {
         localStorage.removeItem('vapurl_api_key');
         setAuthenticated(false);
@@ -151,7 +188,8 @@ export default function App() {
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Custom ID</label>
                 <div className="flex items-center rounded-lg border border-slate-200 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-                  <span className="pl-4 pr-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">{window.location.host}/</span>
+                  <span className="pl-4 pr-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">{window.location.host}</span>
+                  <span className="px-[0.125rem] py-2 text-sm text-slate-400 whitespace-nowrap select-none">/</span>
                   <input
                     type="text"
                     value={customId}

@@ -11,7 +11,7 @@ import App from './client/app.tsx'
 const { renderToString } = pkg
 
 type Bindings = {
-  URL_KV: KVNamespace
+  VAPURL_KV: KVNamespace
   API_KEY: string
 }
 
@@ -27,7 +27,7 @@ app.get('/', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style dangerouslySetInnerHTML={{ __html: `
           body { background-color: #f8fafc; margin: 0; }
-          .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+          .glass { background: rgba(245, 245, 245, 0.9); backdrop-filter: blur(10px); }
           #root { opacity: 0; }
           #root.hydrated { opacity: 1; transition: opacity 0.1s; }
         `}} />
@@ -47,20 +47,19 @@ app.get('/', (c) => {
   return c.html(cacheHtml)
 })
 
-// Redirect logic
-app.get('/:id', async (c) => {
-  const id = c.req.param('id')
-
-  // Get URL from KV
-  const url = await c.env.URL_KV.get(id)
-
-  if (!url) {
-    return c.text('Vapurl: The specified link was not found.', 404)
+// Check if ID exists in KV
+app.get(
+  '/api/check/:id',
+  async (c, next) => {
+    const token = c.env.API_KEY
+    return bearerAuth({ token })(c, next)
+  },
+  async (c) => {
+    const id = c.req.param('id')
+    const url = await c.env.VAPURL_KV.get(id)
+    return c.json({ exists: url !== null })
   }
-
-  // Perform 302 redirect (temporary redirect recommended considering statistics, etc.)
-  return c.redirect(url, 302)
-})
+)
 
 // API key verification endpoint
 app.post(
@@ -91,7 +90,7 @@ app.post(
       }
 
       // Save to KV
-      await c.env.URL_KV.put(id, url)
+      await c.env.VAPURL_KV.put(id, url)
 
       return c.json({
         message: 'Vapurl was created successfully',
@@ -103,5 +102,20 @@ app.post(
     }
   }
 )
+
+// Redirect logic (must be after /api/* routes)
+app.get('/:id', async (c) => {
+  const id = c.req.param('id')
+
+  // Get URL from KV
+  const url = await c.env.VAPURL_KV.get(id)
+
+  if (!url) {
+    return c.text('Vapurl: The specified link was not found.', 404)
+  }
+
+  // Perform 302 redirect (temporary redirect recommended considering statistics, etc.)
+  return c.redirect(url, 302)
+})
 
 export default app
